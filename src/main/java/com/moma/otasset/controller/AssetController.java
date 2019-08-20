@@ -2,6 +2,7 @@ package com.moma.otasset.controller;
 
 
 import com.alibaba.fastjson.JSONObject;
+import com.moma.otasset.config.ot.AssetApi;
 import com.moma.otasset.dao.domain.AssetChange;
 import com.moma.otasset.dao.domain.AssetUser;
 import com.moma.otasset.service.AssetService;
@@ -29,6 +30,9 @@ public class AssetController {
 
     @Resource
     private NoticeController noticeController;
+
+    @Autowired
+    AssetApi assetApi;
 
     //获取所有用户信息
     @GetMapping("getAllUsers")
@@ -75,9 +79,12 @@ public class AssetController {
         if (amount == null || amount.compareTo(BigDecimal.ZERO) == 0) {
             return WebResult.failResult("充值或提现金额不能为空或者0");
         }
-
-
-
+        //调用充提接口
+        JSONObject subuserTransfer = createSubuserTransfer(uid, amount, operationType == 1 ? "充值" : "提现");
+        if (subuserTransfer.getInteger("status") != 2000) {
+            return WebResult.failResult(subuserTransfer.getString("msg"));
+        }
+        //入库充值提现记录
         String res = "";
         if (operationType == 1) {
             res = assetService.rechargeByUid(uid, amount);
@@ -163,6 +170,22 @@ public class AssetController {
             return WebResult.okResult(assetUserByPage);
         }
         return WebResult.okResult(Collections.EMPTY_LIST);
+    }
+
+    private JSONObject createSubuserTransfer(Long uid, BigDecimal amount, String type) {
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("subUid", uid);
+        jsonObject.put("amount", amount);
+        jsonObject.put("currency", "USDT");
+        jsonObject.put("type", type);
+        try {
+            String body = assetApi.createSubuserTransfer(jsonObject).execute().body();
+            JSONObject res = JSONObject.parseObject(body);
+            return res;
+        } catch (Exception e) {
+            log.error("调用充提接口出错，请检查，错误信息：{}", e.getMessage(), e);
+            return null;
+        }
     }
 
 }

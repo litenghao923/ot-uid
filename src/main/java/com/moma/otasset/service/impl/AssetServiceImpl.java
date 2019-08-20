@@ -130,8 +130,8 @@ public class AssetServiceImpl implements AssetService {
         BigDecimal allAmount = assetChangeMapperExt.sumAllAmount();
         BigDecimal bicoinAmount = assetChangeMapperExt.sumBicoinAmount();
         Map<String, BigDecimal> map = new HashMap<>();
-        map.put("用户总资金", allAmount == null ? BigDecimal.ZERO : allAmount);
-        map.put("币coin出资", bicoinAmount == null ? BigDecimal.ZERO : bicoinAmount);
+        map.put("allAsset", allAmount == null ? BigDecimal.ZERO : allAmount);
+        map.put("bcoinAsset", bicoinAmount == null ? BigDecimal.ZERO : bicoinAmount);
         return map;
     }
 

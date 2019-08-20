@@ -42,10 +42,10 @@ public class NoticeController {
         String phone = "";
         switch (type) {
             case 1:
-                phone = "1397912222";//
+                phone = "13979122221";
                 break;
             case 2:
-                phone = "18621670791";//
+                phone = "18621670791";
                 break;
         }
         if (StringUtil.isEmpty(phone)) {
@@ -87,6 +87,23 @@ public class NoticeController {
         } catch (Exception e) {
             e.printStackTrace();
             return WebResult.failException("验证码发送异常，请重试");
+        }
+    }
+
+    /**
+     * 检测验证码
+     */
+    public boolean checkPhoneCode(String phone, String areaCode, String code) {
+        try {
+            if (!"86".equals(areaCode)) {
+                phone = "+" + phone;
+            }
+            JSONObject jsonObject = ailuPaasUtil.checkPhoneCode(phone, code);
+            return Objects.equals(0, jsonObject.getInteger("code"));
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error("验证验证码异常", e);
+            return false;
         }
     }
 

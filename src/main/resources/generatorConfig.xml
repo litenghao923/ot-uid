@@ -74,12 +74,12 @@
         </javaClientGenerator>
 
         <!-- 要生成哪些表-->
-         <!--<table tableName="asset_change" domainObjectName="AssetChange">
+         <table tableName="asset_change" domainObjectName="AssetChange">
              <generatedKey column="id" sqlStatement="Mysql" identity="true"/>
-         </table>-->
-        <!--<table tableName="asset_user" domainObjectName="AssetChange">
+         </table>
+        <table tableName="asset_user" domainObjectName="AssetUser">
         <generatedKey column="id" sqlStatement="Mysql" identity="true"/>
-        </table>-->
+        </table>
 
     </context>
 </generatorConfiguration>

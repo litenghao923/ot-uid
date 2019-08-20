@@ -35,6 +35,7 @@ public class AssetServiceImpl implements AssetService {
     @Override
     public List<AssetUser> getAllUserData() {
         AssetUserExample assetUserExample = new AssetUserExample();
+        assetUserExample.setOrderByClause("c_time desc");
         List<AssetUser> assetUsers = assetUserMapper.selectByExample(assetUserExample);
         if (assetUsers != null && assetUsers.size() > 0) {
             return assetUsers;
@@ -116,7 +117,7 @@ public class AssetServiceImpl implements AssetService {
     public List<AssetChange> getAssetChangeByPage(Integer pageNum, Integer pageSize) {
         PageHelper.startPage(pageNum, pageSize);
         AssetChangeExample assetChangeExample = new AssetChangeExample();
-        assetChangeExample.setOrderByClause("c_time desc");
+        assetChangeExample.setOrderByClause("u_time desc");
         List<AssetChange> assetChanges = assetChangeMapper.selectByExample(null);
         if (assetChanges != null && assetChanges.size() > 0) {
             return assetChanges;
@@ -162,6 +163,8 @@ public class AssetServiceImpl implements AssetService {
     @Override
     public List<AssetUser> getAssetUserByPage(Integer pageNum, Integer pageSize) {
         PageHelper.startPage(pageNum, pageSize);
+        AssetUserExample assetUserExample = new AssetUserExample();
+        assetUserExample.setOrderByClause("c_time desc");
         List<AssetUser> assetUsers = assetUserMapper.selectByExample(null);
         return assetUsers;
     }

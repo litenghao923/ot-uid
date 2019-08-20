@@ -6,15 +6,19 @@ import com.alibaba.fastjson.JSONObject;
 import com.moma.otasset.config.ot.AssetApi;
 import com.moma.otasset.dao.domain.AssetChange;
 import com.moma.otasset.dao.domain.AssetUser;
+import com.moma.otasset.dao.vo.AssetChangeVo;
 import com.moma.otasset.service.AssetService;
 import com.moma.otasset.util.StringUtil;
 import com.moma.otasset.web.WebResult;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -115,7 +119,16 @@ public class AssetController {
                 int maxPage = assetService.getMaxPage(2, pageSize);
                 jsonObject.put("maxPage", maxPage);
                 jsonObject.put("nowPage", pageNum);
-                jsonObject.put("changeList", assetChangeByPage);
+                List<AssetChangeVo> assetChangeVos = new ArrayList<>();
+                assetChangeByPage.forEach(o -> {
+                    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                    String format = simpleDateFormat.format(o.getcTime());
+                    AssetChangeVo assetChangeVo = new AssetChangeVo();
+                    BeanUtils.copyProperties(o, assetChangeVo);
+                    assetChangeVo.setCTime(format);
+                    assetChangeVos.add(assetChangeVo);
+                });
+                jsonObject.put("changeList", assetChangeVos);
                 return WebResult.okResult(jsonObject);
             }
             return WebResult.okResult(Collections.EMPTY_LIST);

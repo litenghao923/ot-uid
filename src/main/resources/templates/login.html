@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>登录</title>
+    <link href="https://cdn.bootcss.com/twitter-bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+    <!-- HTML5 Shiv 和 Respond.js 用于让 IE8 支持 HTML5元素和媒体查询 -->
+    <!-- 注意： 如果通过 file://  引入 Respond.js 文件，则该文件无法起效果 -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+    <![endif]-->
+    <link rel="stylesheet" href="/css/common.css">
+</head>
+<body>
+<div class="container" id="loginForm">
+    <form class="form-horizontal justify-content-center text-center" action="/login" method="post">
+        <div class="form-group text-center">
+            <div class="col-sm-12">
+                <input type="text" class="form-control" id="userName" name="userName" placeholder="用户名">
+            </div>
+        </div>
+        <div class="form-group text-center">
+            <div class="col-sm-12">
+                <input type="text" class="form-control" id="password" name="password" placeholder="密码">
+            </div>
+        </div>
+        <div class="form-group text-center">
+            <div class="col-sm-12">
+                <button type="submit" class="btn btn-primary">登录</button>
+            </div>
+        </div>
+    </form>
+</div>
+</body>
+<script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js"></script>
+<script src="https://cdn.bootcss.com/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>
+</html>

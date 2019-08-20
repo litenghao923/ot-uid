@@ -12,11 +12,173 @@
     <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
     <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
     <![endif]-->
+    <link rel="stylesheet" href="/css/common.css">
 </head>
 <body>
-<h1>资金账单</h1>
+<!--主体-->
+<div class="main">
+    <header class="header">BICOIN</header>
+    <!--侧边栏-->
+    <div class="mainContent">
+        <!--导航列表-->
+        <ul class="navList">
+            <li>
+                <a href="/recharge">充值提现</a>
+            </li>
+            <li class="active">
+                <a href="/order">资金账单</a>
+            </li>
+            <li>
+                <a href="/user">管理用户</a>
+            </li>
+            <li>
+                <a href="/account">账户总览</a>
+            </li>
+            <li>
+                <a href="/index">币coin操作</a>
+            </li>
+        </ul>
+        <!--主要内容-->
+        <div class="content column-content">
+            <table class="grid">
+                <thead>
+                <tr>
+                    <th>时间</th>
+                    <th>火币UID</th>
+                    <th>昵称</th>
+                    <th>类型</th>
+                    <th>币coin出借资金变动</th>
+                    <th>币coin出借资金</th>
+                </tr>
+                </thead>
+                <tbody id="list"></tbody>
+            </table>
+            <div class="nav_bar btn-group">
+                <button id="first_btn">首页</button>
+                <button id="prev_btn">上一页</button>
+                <span id="pageInfo">1/20</span>
+                <button id="next_btn">下一页</button>
+                <button id="last_btn">尾页</button>
+            </div>
+        </div>
+    </div>
+</div>
 </body>
 <script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js"></script>
 <script src="https://cdn.bootcss.com/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>
-<script src="https://cdn.bootcss.com/bootstrap-table/1.15.4/bootstrap-table.min.js"></script>
+<script>
+    var data={
+        "code": 0,
+        "message": "成功",
+        "data": {
+            "nowPage": 1,
+            "maxPage": 93,
+            "data": [
+                {
+                    "time": "2019-08-20 16:27:08",
+                    "uid": 1111,
+                    "nickName": "张三",
+                    "type": 1,
+                    "bicoinMove": 1324,
+                    "bicoinFund": 92343
+                },
+                {
+                    "time": "2019-08-20 16:27:07",
+                    "uid": 2222,
+                    "nickName": "李四",
+                    "type": 2,
+                    "bicoinMove": 5324,
+                    "bicoinFund": 92344
+                },
+                {
+                    "time": "2019-08-20 16:27:06",
+                    "uid": 3333,
+                    "nickName": "王五",
+                    "type": 3,
+                    "bicoinMove": 9844,
+                    "bicoinFund": 92345
+                },
+                {
+                    "time": "2019-08-20 16:27:05",
+                    "uid": 4444,
+                    "nickName": "赵六",
+                    "type": 4,
+                    "bicoinMove": -3454,
+                    "bicoinFund": 92346
+                },
+                {
+                    "time": "2019-08-20 16:27:04",
+                    "uid": 5555,
+                    "nickName": "田七",
+                    "type": 1,
+                    "bicoinMove": -453,
+                    "bicoinFund": 92347
+                }
+            ]
+        }
+    }
+
+    function showOrderList(data) {
+        $("#list").empty();
+        $.each(data,function (index,item) {
+            var tr=$("<tr></tr>");
+            var time=$("<td>"+item.time+"</td>");
+            var uid=$("<td>"+item.uid+"</td>");
+            var nickName=$("<td>"+item.nickName+"</td>");
+            var type;
+            switch (item.type) {
+                case 1:
+                    type=$("<td class='green_point'>用户充值</td>");
+                    break;
+                case 2:
+                    type=$("<td class='red_point'>用户提现</td>");
+                    break;
+                case 3:
+                    type=$("<td class='blue_point'>交易团队给币coin</td>");
+                    break;
+                case 4:
+                    type=$("<td class='yellow_point'>币coin给交易团队</td>");
+                    break;
+            };
+            if (item.bicoinMove>0){
+                item.bicoinMove="+"+item.bicoinMove;
+            }
+            var bicoinMove=$("<td>"+item.bicoinMove+" USDT</td>");
+            var bicoinFund=$("<td>"+item.bicoinFund+" USDT</td>");
+            tr.append(time).append(uid).append(nickName).append(type).append(bicoinMove).append(bicoinFund);
+            $("#list").append(tr);
+        })
+    }
+    showOrderList(data.data.data);
+
+    function showOrderPageList(data) {
+        $("#pageInfo").html(data.data.nowPage+"/"+data.data.maxPage);
+        $("#first_btn").bind("click",function () {
+            console.log("第一页")
+        });
+        $("#last_btn").bind("click",function () {
+            console.log("最后一页")
+        });
+        $("#prev_btn").bind("click",function () {
+            console.log("上一页")
+        });
+        $("#next_btn").bind("click",function () {
+            console.log("下一页")
+        })
+    }
+
+    function getOrderListByPageNo(pageNo) {
+        $.ajax({
+            type:"get",
+            url:"/",
+            success:function (res) {
+                if (res.code==0){
+                    showOrderList(res.data.data);
+                    showOrderPageList(res.data)
+                }
+            }
+        })
+    }
+
+</script>
 </html>

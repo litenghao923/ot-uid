@@ -1,0 +1,50 @@
+{
+  "code": 0,
+  "message": "成功",
+  "data": {
+    "nowPage": 1,
+    "maxPage": 93,
+    "data": [
+      {
+        "time": "2019-08-20 16:27:08",
+        "uid": 1111,
+        "nickName": "张三",
+        "type": 1,
+        "bicoinMove": 1324,
+        "bicoinFund": 92343
+      },
+      {
+        "time": "2019-08-20 16:27:07",
+        "uid": 2222,
+        "nickName": "李四",
+        "type": 2,
+        "bicoinMove": 5324,
+        "bicoinFund": 92344
+      },
+      {
+        "time": "2019-08-20 16:27:06",
+        "uid": 3333,
+        "nickName": "王五",
+        "type": 3,
+        "bicoinMove": 9844,
+        "bicoinFund": 92345
+      },
+      {
+        "time": "2019-08-20 16:27:05",
+        "uid": 4444,
+        "nickName": "赵六",
+        "type": 4,
+        "bicoinMove": -3454,
+        "bicoinFund": 92346
+      },
+      {
+        "time": "2019-08-20 16:27:04",
+        "uid": 5555,
+        "nickName": "田七",
+        "type": 1,
+        "bicoinMove": -453,
+        "bicoinFund": 92347
+      }
+    ]
+  }
+}

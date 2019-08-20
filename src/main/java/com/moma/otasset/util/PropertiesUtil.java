@@ -14,7 +14,7 @@ public class PropertiesUtil {
 
 	public static Properties getProperties() {
     	Properties prop = new Properties();
-        InputStream in = WebResult.class.getClassLoader().getResourceAsStream("webResult.properties");
+        InputStream in = WebResult.class.getClassLoader().getResourceAsStream("config/webResult.properties");
         try {
 			//InputStream in = new FileInputStream(new File(path));
 			prop.load(in);

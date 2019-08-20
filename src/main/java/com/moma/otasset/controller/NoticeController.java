@@ -35,7 +35,19 @@ public class NoticeController {
     @PostMapping("sendCode")
     public WebResult sendIdentifyingCodeCheckImg(HttpServletRequest request, @RequestBody JSONObject jsonObject) {
         //获取用户手机号
-        String phone = jsonObject.getString("phone");
+        Integer type = jsonObject.getInteger("type");
+        if (type == null) {
+            return WebResult.failResult("参数异常!");
+        }
+        String phone = "";
+        switch (type) {
+            case 1:
+                phone = "1397912222";//
+                break;
+            case 2:
+                phone = "18621670791";//
+                break;
+        }
         if (StringUtil.isEmpty(phone)) {
             return WebResult.failResult("用户手机号不存在");
         }
@@ -46,14 +58,8 @@ public class NoticeController {
             phone = s.replace(0, 1, "886").toString();
         }
         try {
-            Boolean imgFlag = false;
-            //验证验证码
-            if (imgFlag) {
-                //发送短信验证码
-                return sendPhoneCode(phone, areaCode);
-            } else {
-                return WebResult.failResult("图片验证码错误，短信发送失败");
-            }
+            //发送短信验证码
+            return sendPhoneCode(phone, areaCode);
         } catch (Exception e) {
             log.error("发送验证码 异常：", e);
             return WebResult.failException();
@@ -75,7 +81,7 @@ public class NoticeController {
             }
             Integer code = jsonObject.getInteger("code");
             if (Objects.equals(0, code)) {
-                return WebResult.okResult(1007);
+                return WebResult.okResult();
             }
             return WebResult.failResult(jsonObject.getString("msg"));
         } catch (Exception e) {

@@ -67,66 +67,21 @@
 <script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js"></script>
 <script src="https://cdn.bootcss.com/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>
 <script>
-    var data={
-        "code": 0,
-        "message": "成功",
-        "data": {
-            "nowPage": 1,
-            "maxPage": 93,
-            "data": [
-                {
-                    "time": "2019-08-20 16:27:08",
-                    "uid": 1111,
-                    "nickName": "张三",
-                    "type": 1,
-                    "bicoinMove": 1324,
-                    "bicoinFund": 92343
-                },
-                {
-                    "time": "2019-08-20 16:27:07",
-                    "uid": 2222,
-                    "nickName": "李四",
-                    "type": 2,
-                    "bicoinMove": 5324,
-                    "bicoinFund": 92344
-                },
-                {
-                    "time": "2019-08-20 16:27:06",
-                    "uid": 3333,
-                    "nickName": "王五",
-                    "type": 3,
-                    "bicoinMove": 9844,
-                    "bicoinFund": 92345
-                },
-                {
-                    "time": "2019-08-20 16:27:05",
-                    "uid": 4444,
-                    "nickName": "赵六",
-                    "type": 4,
-                    "bicoinMove": -3454,
-                    "bicoinFund": 92346
-                },
-                {
-                    "time": "2019-08-20 16:27:04",
-                    "uid": 5555,
-                    "nickName": "田七",
-                    "type": 1,
-                    "bicoinMove": -453,
-                    "bicoinFund": 92347
-                }
-            ]
-        }
-    }
+    var initPageNum=1;
+    var initPageSize=10;
+    var initTotalPage;
+
+    getOrderListByPageNo(initPageNum,initPageSize);
 
     function showOrderList(data) {
         $("#list").empty();
         $.each(data,function (index,item) {
             var tr=$("<tr></tr>");
-            var time=$("<td>"+item.time+"</td>");
-            var uid=$("<td>"+item.uid+"</td>");
+            var time=$("<td>"+item.cTime+"</td>");
+            var uid=$("<td>"+item.huobiUid+"</td>");
             var nickName=$("<td>"+item.nickName+"</td>");
             var type;
-            switch (item.type) {
+            switch (item.operationType) {
                 case 1:
                     type=$("<td class='green_point'>用户充值</td>");
                     break;
@@ -140,41 +95,67 @@
                     type=$("<td class='yellow_point'>币coin给交易团队</td>");
                     break;
             };
-            if (item.bicoinMove>0){
-                item.bicoinMove="+"+item.bicoinMove;
+            if (item.bcoinAssetChange>0){
+                item.bcoinAssetChange="+"+item.bcoinAssetChange;
             }
-            var bicoinMove=$("<td>"+item.bicoinMove+" USDT</td>");
-            var bicoinFund=$("<td>"+item.bicoinFund+" USDT</td>");
+            var bicoinMove=$("<td>"+item.bcoinAssetChange+" USDT</td>");
+            var bicoinFund=$("<td>"+item.bcoinAsset+" USDT</td>");
             tr.append(time).append(uid).append(nickName).append(type).append(bicoinMove).append(bicoinFund);
             $("#list").append(tr);
         })
     }
-    showOrderList(data.data.data);
 
     function showOrderPageList(data) {
-        $("#pageInfo").html(data.data.nowPage+"/"+data.data.maxPage);
-        $("#first_btn").bind("click",function () {
-            console.log("第一页")
-        });
-        $("#last_btn").bind("click",function () {
-            console.log("最后一页")
-        });
-        $("#prev_btn").bind("click",function () {
-            console.log("上一页")
-        });
-        $("#next_btn").bind("click",function () {
-            console.log("下一页")
-        })
+        $("#pageInfo").html(data.nowPage+"/"+data.maxPage);
     }
 
-    function getOrderListByPageNo(pageNo) {
+    $("#first_btn").on("click",function () {
+        if (initPageNum==1) {
+            alert("已经是第一页")
+        }else {
+            getOrderListByPageNo(1,initPageSize);
+        }
+    });
+    $("#last_btn").on("click",function () {
+        if (initPageNum==initTotalPage){
+            alert("已经是最后一页")
+        } else {
+            getOrderListByPageNo(initTotalPage,initPageSize);
+        }
+    });
+    $("#prev_btn").on("click",function () {
+        if (initPageNum==1){
+            alert("已经是第一页")
+        } else {
+            initPageNum--;
+            getOrderListByPageNo(initPageNum,initPageSize);
+        }
+    });
+    $("#next_btn").on("click",function () {
+        if(initPageNum==initTotalPage){
+            alert("已经是最后一页");
+        }else {
+            initPageNum++;
+            getOrderListByPageNo(initPageNum,initPageSize);
+        }
+    })
+
+    function getOrderListByPageNo(pageNo,pageSize) {
         $.ajax({
             type:"get",
-            url:"/",
+            url:"/asset/changeList?pageNum="+pageNo+"&pageSize="+pageSize,
             success:function (res) {
                 if (res.code==0){
-                    showOrderList(res.data.data);
+                    if (res.data.length==0){
+                        alert("暂无数据");
+                        return;
+                    }
+                    initPageNum=res.data.nowPage;
+                    initTotalPage=res.data.maxPage;
+                    showOrderList(res.data.changeList);
                     showOrderPageList(res.data)
+                }else {
+                    alert("请求数据失败")
                 }
             }
         })

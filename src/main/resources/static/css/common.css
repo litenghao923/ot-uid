@@ -261,7 +261,7 @@ body,html{
 
 .delete_model{
     width: 450px;
-    height: 270px;
+    height: 300px;
     background-color: #ffffff;
     position: absolute;
     top: 30%;
@@ -271,6 +271,11 @@ body,html{
     padding: 50px 45px;
     font-size: 14px;
     display: none;
+}
+
+#close—btn{
+    width: 100%;
+    margin-top: 5px;
 }
 
 .delete_model label{

@@ -12,6 +12,41 @@
     <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
     <![endif]-->
     <link rel="stylesheet" href="/css/common.css">
+    <style>
+        .addUser{
+            width: 100%;
+            height: 85px;
+            background-color: white;
+            display: flex;
+            font-size: 14px;
+            padding: 25px 50px;
+            margin-bottom: 30px;
+
+        }
+
+        .addUser label{
+            line-height: 32px;
+            margin-right: 5px;
+        }
+
+        .addUser input{
+            width: 280px;
+            line-height: 32px;
+            margin-right: 40px;
+            padding-left: 5px;
+        }
+
+        .addUser button{
+            width: 120px;
+            height: 35px;
+            line-height: 35px;
+            border-radius: 4px;
+            outline: none;
+            background-color: #1890FF;
+            color: white;
+            border: none;
+        }
+    </style>
 </head>
 <body>
 <!--主体-->
@@ -39,6 +74,19 @@
         </ul>
         <!--主要内容-->
         <div class="content column-content">
+            <div class="addUser">
+                <div>
+                    <label for="user_uid">火币UID:</label>
+                    <input type="text" id="user_uid" placeholder="请输入用户火币UID">
+                </div>
+                <div>
+                    <label for="user_nickName">昵称:</label>
+                    <input type="text" id="user_nickName" placeholder="请输入用户昵称">
+                </div>
+                <div>
+                    <button class="blue_btn" id="addUserBtn">新增用户</button>
+                </div>
+            </div>
             <table class="grid">
                 <thead>
                 <tr>
@@ -66,96 +114,126 @@
     <p>您将要删除 <span class="user_info">囤明星（UID:12345）</span>,请验证您的身份</p>
     <p>
         <label for="d-v-code">验证码：</label>
+        <input type="hidden" id="uid">
         <input type="text" class="d-v-code form-control" id="d-v-code" placeholder="验证码">
         <button type="button" class="v-code-btn" onclick="deleteUserByUid(1,123)">获取验证码</button>
     </p>
     <p>
         <button type="button" class="btn blue-btn">确认删除</button>
+        <br>
+        <button type="button" id="close—btn" class="btn btn-link">退出</button>
     </p>
 </div>
 </body>
 <script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js"></script>
 <script src="https://cdn.bootcss.com/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>
 <script>
-    var data={
-        "code": 0,
-        "message": "成功",
-        "data": {
-            "nowPage": 1,
-            "maxPage": 93,
-            "data": [
-                {
-                    "uid": 1111,
-                    "nickName": "张三",
-                    "account": 92343
-                },
-                {
-                    "uid": 2222,
-                    "nickName": "李四",
-                    "account": 92344
-                },
-                {
-                    "uid": 3333,
-                    "nickName": "王五",
-                    "account": 92345
-                },
-                {
-                    "uid": 4444,
-                    "nickName": "赵六",
-                    "account": 92346
-                },
-                {
-                    "uid": 5555,
-                    "nickName": "田七",
-                    "account": 92347
-                }
-            ]
-        }
-    }
+    var initPageNum=1;
+    var initPageSize=10;
+    var initTotalPage;
 
-    function showOrderList(data) {
+    getUserListByPageNo(initPageNum,initPageSize);
+
+    $("#addUserBtn").on("click",function () {
+        var uid=$("#user_uid").val().trim();
+        var nickName=$("#user_nickName").val().trim();
+        $.ajax({
+            type:"post",
+            url:"/user/addUser",
+            data:JSON.stringify({
+                uid:uid,
+                nickName:nickName
+            }),
+            contentType:'application/json',
+            success:function (res) {
+                if(res.code==0){
+                    alert("新增用户成功");
+                    getUserListByPageNo(1,initPageSize);
+                }else {
+                    alert("新增用户失败");
+                }
+            }
+
+        })
+    })
+
+    function showUserList(data) {
         $("#list").empty();
         $.each(data,function (index,item) {
             var tr=$("<tr></tr>");
-            var uid=$("<td>"+item.uid+"</td>");
+            var uid=$("<td>"+item.huobiUid+"</td>");
             var nickName=$("<td>"+item.nickName+"</td>");
-            var bicoinAccount=$("<td>"+item.account+" USDT</td>");
-            var deleteBtn=$("<button class='btn btn-danger' onclick='deleteUserByUid("+item.uid+")'>删除</button>")
+            var bicoinAccount=$("<td>"+item.asset+" USDT</td>");
+            var deleteBtn=$("<button class='btn btn-danger'>删除</button>").bind("click",function () {
+                // showDeleteDialog(item.huobiUid,item.nickName);
+                alert("暂不支持删除用户")
+            });
             tr.append(uid).append(nickName).append(bicoinAccount).append(deleteBtn);
             $("#list").append(tr);
         })
     }
-    showOrderList(data.data.data);
 
-    function showOrderPageList(data) {
-        $("#pageInfo").html(data.data.nowPage+"/"+data.data.maxPage);
-        $("#first_btn").bind("click",function () {
-            console.log("第一页")
-        });
-        $("#last_btn").bind("click",function () {
-            console.log("最后一页")
-        });
-        $("#prev_btn").bind("click",function () {
-            console.log("上一页")
-        });
-        $("#next_btn").bind("click",function () {
-            console.log("下一页")
-        })
+    function showUserPageList(data) {
+        $("#pageInfo").html(data.nowPage+"/"+data.maxPage);
     }
 
-    function getOrderListByPageNo(pageNo) {
+    $("#first_btn").on("click",function () {
+        if (initPageNum==1) {
+            alert("已经是第一页")
+        }else {
+            getUserListByPageNo(1,initPageSize);
+        }
+    });
+    $("#last_btn").on("click",function () {
+        if (initPageNum==initTotalPage){
+            alert("已经是最后一页")
+        } else {
+            getUserListByPageNo(initTotalPage,initPageSize);
+        }
+    });
+    $("#prev_btn").on("click",function () {
+        if (initPageNum==1){
+            alert("已经是第一页")
+        } else {
+            initPageNum--;
+            getUserListByPageNo(initPageNum,initPageSize);
+        }
+    });
+    $("#next_btn").on("click",function () {
+        if(initPageNum==initTotalPage){
+            alert("已经是最后一页");
+        }else {
+            initPageNum++;
+            getUserListByPageNo(initPageNum,initPageSize);
+        }
+    })
+
+    function getUserListByPageNo(pageNo,pageSize) {
         $.ajax({
             type:"get",
-            url:"/",
+            url:"/asset/allAssetUsers?pageNum="+pageNo+"&pageSize="+pageSize,
             success:function (res) {
                 if (res.code==0){
-                    showOrderList(res.data.data);
-                    showOrderPageList(res.data)
+                    if (res.data.length==0){
+                        alert("暂无数据");
+                        return;
+                    }
+                    initPageNum=res.data.nowPage;
+                    initTotalPage=res.data.maxPage;
+                    showUserList(res.data.assetUsers);
+                    showUserPageList(res.data)
                 }
             }
         })
     }
 
+    $("#close—btn").on("click",function () {
+        $(".delete_model .user_info").html("");
+        $("#d-v-code").val("");
+        $("#uid").val("");
+        $(".mask").hide();
+        $(".delete_model").hide();
+    })
 
 
     function deleteUserByUid(uid,vcode) {
@@ -170,7 +248,7 @@
             success:function (res) {
                 if(res.code==0){
                     alert("删除成功");
-                    getOrderListByPageNo(1)
+                    getOrderListByPageNo(1,initPageSize)
                 }
             }
 
@@ -179,6 +257,9 @@
 
     function showDeleteDialog(uid,nickName) {
         $(".delete_model .user_info").html(nickName+" (UID:"+uid+")");
+        $("#uid").val(uid);
+        $(".mask").show();
+        $(".delete_model").show();
     }
 </script>
 </html>

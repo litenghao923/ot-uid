@@ -1,6 +1,7 @@
 package com.moma.otasset.controller;
 
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.moma.otasset.config.ot.AssetApi;
 import com.moma.otasset.dao.domain.AssetChange;
@@ -102,7 +103,12 @@ public class AssetController {
         try {
             List<AssetChange> assetChangeByPage = assetService.getAssetChangeByPage(pageNum, pageSize);
             if (assetChangeByPage != null) {
-                return WebResult.okResult(assetChangeByPage);
+                JSONObject jsonObject = new JSONObject();
+                int maxPage = assetService.getMaxPage(2, pageSize);
+                jsonObject.put("maxPage", maxPage);
+                jsonObject.put("nowPage", pageNum);
+                jsonObject.put("changeList", assetChangeByPage);
+                return WebResult.okResult(jsonObject);
             }
             return WebResult.okResult(Collections.EMPTY_LIST);
         } catch (Exception e) {
@@ -165,7 +171,12 @@ public class AssetController {
                                    @RequestParam(value = "pageSize", defaultValue = "10") Integer pageSize) {
         List<AssetUser> assetUserByPage = assetService.getAssetUserByPage(pageNum, pageSize);
         if (assetUserByPage != null && assetUserByPage.size() > 0) {
-            return WebResult.okResult(assetUserByPage);
+            JSONObject jsonObject = new JSONObject();
+            int maxPage = assetService.getMaxPage(1, pageSize);
+            jsonObject.put("maxPage", maxPage);
+            jsonObject.put("nowPage", pageNum);
+            jsonObject.put("assetUsers", assetUserByPage);
+            return WebResult.okResult(jsonObject);
         }
         return WebResult.okResult(Collections.EMPTY_LIST);
     }

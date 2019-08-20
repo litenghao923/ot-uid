@@ -27,4 +27,6 @@ public interface AssetService {
     String biCoinToTeam(BigDecimal amount, Integer type);
 
     List<AssetUser> getAssetUserByPage(Integer pageNum, Integer pageSize);
+
+    Integer getMaxPage(Integer type, Integer pageSize);
 }

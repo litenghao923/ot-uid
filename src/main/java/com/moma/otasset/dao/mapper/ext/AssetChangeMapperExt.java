@@ -14,4 +14,11 @@ public interface AssetChangeMapperExt {
     @Select("SELECT bcoin_asset FROM asset_change ORDER BY c_time desc limit 1")
     BigDecimal sumBicoinAmount();
 
+    @Select("SELECT count(*) FROM asset_user")
+    Integer countAssetUser();
+
+    @Select("SELECT count(*) FROM asset_change")
+    Integer countAssetChange();
+
+
 }

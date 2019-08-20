@@ -162,9 +162,26 @@ public class AssetServiceImpl implements AssetService {
 
     @Override
     public List<AssetUser> getAssetUserByPage(Integer pageNum, Integer pageSize) {
-        PageHelper.startPage(pageNum,pageSize);
+        PageHelper.startPage(pageNum, pageSize);
         List<AssetUser> assetUsers = assetUserMapper.selectByExample(null);
         return assetUsers;
+    }
+
+    @Override
+    public Integer getMaxPage(Integer type, Integer pageSize) {
+        //1uid表，2资金变动表
+        if (type == 1) {
+            Integer integer = assetChangeMapperExt.countAssetUser();
+            if (integer != null) {
+                return (integer - 1) / pageSize + 1;
+            }
+        } else {
+            Integer integer = assetChangeMapperExt.countAssetChange();
+            if (integer != null) {
+                return (integer - 1) / pageSize + 1;
+            }
+        }
+        return null;
     }
 
     private String addAssetChange(AssetUser assetUser, BigDecimal amount, BigDecimal asset, Integer type) {

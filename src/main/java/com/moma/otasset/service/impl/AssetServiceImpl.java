@@ -165,7 +165,7 @@ public class AssetServiceImpl implements AssetService {
         PageHelper.startPage(pageNum, pageSize);
         AssetUserExample assetUserExample = new AssetUserExample();
         assetUserExample.setOrderByClause("c_time desc");
-        List<AssetUser> assetUsers = assetUserMapper.selectByExample(null);
+        List<AssetUser> assetUsers = assetUserMapper.selectByExample(assetUserExample);
         return assetUsers;
     }
 

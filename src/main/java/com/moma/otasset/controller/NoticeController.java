@@ -81,7 +81,7 @@ public class NoticeController {
             }
             Integer code = jsonObject.getInteger("code");
             if (Objects.equals(0, code)) {
-                return WebResult.okResult();
+                return WebResult.okResult(1007);
             }
             return WebResult.failResult(jsonObject.getString("msg"));
         } catch (Exception e) {

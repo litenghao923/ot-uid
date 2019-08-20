@@ -9,7 +9,7 @@ import java.util.Map;
 
 public interface AssetService {
 
-    List<String> getAllUserData();
+    List<AssetUser> getAllUserData();
 
     //充值
     String rechargeByUid(Long uid, BigDecimal amount);

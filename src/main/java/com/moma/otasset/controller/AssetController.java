@@ -18,6 +18,7 @@ import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Slf4j
 @RestController
@@ -36,9 +37,16 @@ public class AssetController {
     //获取所有用户信息
     @GetMapping("getAllUsers")
     public WebResult getAllUsers(HttpServletRequest request) {
-        List<String> allUserData = assetService.getAllUserData();
+        List<AssetUser> allUserData = assetService.getAllUserData();
         if (allUserData != null) {
-            return WebResult.okResult(allUserData);
+            JSONArray jsonArray = new JSONArray();
+            allUserData.forEach(o -> {
+                JSONObject jsonObject = new JSONObject();
+                jsonObject.put("niceName", o.getNickName());
+                jsonObject.put("uid", o.getHuobiUid());
+                jsonArray.add(jsonObject);
+            });
+            return WebResult.okResult(jsonArray);
         }
         return WebResult.failResult("未获取到用户相关信息!");
     }

@@ -33,12 +33,11 @@ public class AssetServiceImpl implements AssetService {
     AssetChangeMapperExt assetChangeMapperExt;
 
     @Override
-    public List<String> getAllUserData() {
+    public List<AssetUser> getAllUserData() {
         AssetUserExample assetUserExample = new AssetUserExample();
         List<AssetUser> assetUsers = assetUserMapper.selectByExample(assetUserExample);
         if (assetUsers != null && assetUsers.size() > 0) {
-            List<String> collect = assetUsers.stream().map(o -> o.getNickName() + " (UID" + o.getHuobiUid() + ")").collect(Collectors.toList());
-            return collect;
+            return assetUsers;
         }
         return null;
     }

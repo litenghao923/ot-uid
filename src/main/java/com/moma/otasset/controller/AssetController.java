@@ -75,6 +75,9 @@ public class AssetController {
         if (amount == null || amount.compareTo(BigDecimal.ZERO) == 0) {
             return WebResult.failResult("充值或提现金额不能为空或者0");
         }
+
+
+
         String res = "";
         if (operationType == 1) {
             res = assetService.rechargeByUid(uid, amount);

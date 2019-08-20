@@ -11,9 +11,9 @@ spring:
     suffix: .html
   datasource:
     driver-class-name: com.mysql.jdbc.Driver
-    url: jdbc:mysql://106.46.169.241:3306/blz?useUnicode=true&zeroDateTimeBehavior=convertToNull&autoReconnect=true&useSSL=false
-    username: developer
-    password: Bb6hXestiGkC4yfj
+    url: jdbc:mysql://120.27.211.197:3306/blz?useUnicode=true&zeroDateTimeBehavior=convertToNull&autoReconnect=true&useSSL=false
+    username: kaifa_A
+    password: 2cyNKp%DHYhnGQfu
     hikari:
       connection-timeout: 30000
       max-lifetime: 6000

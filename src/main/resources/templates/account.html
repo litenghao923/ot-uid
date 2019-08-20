@@ -57,4 +57,20 @@
 </body>
 <script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js"></script>
 <script src="https://cdn.bootcss.com/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $.ajax({
+            type:"get",
+            url:"/asset/accountOverview",
+            success:function (res) {
+                if(res.code==0){
+                    $("#all-account").html(res.data.bcoinAsset);
+                    $("#bicoin-account").html(res.data.allAsset);
+                }else {
+                    alert("数据请求失败")
+                }
+            }
+        })
+    })
+</script>
 </html>

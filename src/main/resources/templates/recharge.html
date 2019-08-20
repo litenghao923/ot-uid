@@ -41,12 +41,8 @@
         <div class="content">
             <div class="input-form recharge-content-form">
                 <div class="form-group">
-                    <label for="rechargeUser">充值用户:</label>
-                    <select name="rechargeUser" id="rechargeUser">
-                        <option value="1111">Jerry</option>
-                        <option value="1234">haohao</option>
-                        <option value="1314">Moumo</option>
-                    </select>
+                    <label for="userSelect">充值用户:</label>
+                    <select name="rechargeUser" id="userSelect"></select>
                 </div>
                 <div class="form-group">
                     <label for="rechargeNum">充值金额:</label>
@@ -59,17 +55,13 @@
                     <button type="button" class="unit-btn vCode-btn" value="1">获取验证码</button>
                 </div>
                 <div class="form-group">
-                    <button type="submit" class="btn btn-primary" id="rechargeBtn">确认充值</button>
+                    <button type="button" class="btn btn-primary" id="rechargeBtn" value="1">确认充值</button>
                 </div>
             </div>
             <div class="input-form recharge-content-form">
                 <div class="form-group">
                     <label for="cashUser">提现用户:</label>
-                    <select name="cashUser" id="cashUser">
-                        <option value="1111">Jerry</option>
-                        <option value="1234">haohao</option>
-                        <option value="1314">Moumo</option>
-                    </select>
+                    <select name="cashUser" id="cashUser"></select>
                 </div>
                 <div class="form-group">
                     <label for="cashNum">提现金额:</label>
@@ -82,7 +74,7 @@
                     <button type="button" class="unit-btn vCode-btn" value="2">获取验证码</button>
                 </div>
                 <div class="form-group">
-                    <button type="submit" class="btn btn-danger" id="cashBtn">确认提现</button>
+                    <button type="button" class="btn btn-danger" id="cashBtn" value="2">确认提现</button>
                 </div>
             </div>
         </div>
@@ -91,4 +83,123 @@
 </body>
 <script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js"></script>
 <script src="https://cdn.bootcss.com/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>
+<script>
+    //验证码倒计时函数
+    var wait=60;
+    function changeTime(time_btn) {
+        if (wait == 0) {
+            time_btn.css("color","#1890FF");
+            time_btn.prop("disabled",false);
+            time_btn.text("获取验证码");
+            wait = 60;
+        } else {
+            time_btn.css("color","#cccccc");
+            time_btn.prop("disabled", true);
+            time_btn.text(wait + "(s)");
+            wait--;
+            setTimeout(function() {
+                changeTime(time_btn)
+            }, 1000)
+        }
+    }
+
+    $(document).ready(function () {
+        $.ajax({
+            type:"get",
+            url:"/asset/getAllUsers",
+            success:function (res) {
+                if (res.code==0){
+                    if (res.data.length==0){
+                        alert("暂无用户");
+                        return;
+                    }
+                    showRechargeUsers(res.data);
+                    showCashUsers(res.data);
+                } else {
+                    alert("无法获取到用户下拉菜单")
+                }
+            }
+
+        })
+    })
+
+    function showRechargeUsers(data) {
+        $("#userSelect").empty();
+        $.each(data,function (index,item) {
+            var option=$("<option value='"+item.uid+"'>"+item.niceName+"(UID "+item.uid+")</option>");
+            $("#userSelect").append(option);
+        })
+    }
+
+    function showCashUsers(data) {
+        $("#cashUser").empty();
+        $.each(data,function (index,item) {
+            var option=$("<option value='"+item.uid+"'>"+item.niceName+"(UID "+item.uid+")</option>");
+            $("#cashUser").append(option);
+        })
+    }
+
+    $(".vCode-btn").on("click",function () {
+        var type=$(this);
+        changeTime(type);
+        $.ajax({
+            type:"post",
+            url:'/notice/sendCode',
+            data:JSON.stringify({
+                type:type.val()
+            }),
+            contentType:'application/json',
+            success:function (res) {
+                if(res.code==0){
+                    alert("验证码发送成功");
+                }else {
+                    console.log("验证码发送失败");
+                    alert("验证码发送失败，验证码一个手机号1小时内只能接收10次短信")
+                }
+            }
+        })
+    });
+
+    function submitForm(code,operationType,uid,amount){
+        if(code==""||uid==""||amount==""){
+            alert("验证码、金额、用户不能为空")
+            return;
+        }else {
+            $.ajax({
+                type:"post",
+                url:"/asset/recharge",
+                data:JSON.stringify({
+                    code:code,
+                    operationType:operationType,
+                    uid:uid,
+                    amount:amount
+                }),
+                contentType:'application/json',
+                success:function (res) {
+                    if(res.code==0){
+                        alert(res.dialog.title);
+                    }else {
+                        alert(res.dialog.title);
+                    }
+                }
+            })
+        }
+    }
+
+    $("#rechargeBtn").on("click",function () {
+        var code=$("#vRechargeCode").val().trim();
+        var operationType=1;
+        var uid=$("#userSelect").val();
+        var amount=$("#rechargeNum").val();
+        submitForm(code,operationType,uid,amount);
+    })
+
+    $("#cashBtn").on("click",function () {
+        var code=$("#vCashCode").val().trim();
+        var operationType=2;
+        var uid=$("#cashUser").val();
+        var amount=$("#cashNum").val();
+        submitForm(code,operationType,uid,amount);
+    })
+</script>
 </html>

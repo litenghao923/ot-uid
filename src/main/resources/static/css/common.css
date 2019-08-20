@@ -1,0 +1,27 @@
+*{
+    list-style: none;
+}
+
+body,html{
+    width: 100%;
+    height: 100%;
+    background-color: #F0F3F7;
+}
+
+.header{
+    width: 100%;
+    height: 50px;
+    color: black;
+    font-size: 25px;
+    line-height: 50px;
+}
+
+#loginForm .form-horizontal{
+    width: 500px;
+    margin: 20% auto;
+}
+
+#loginForm .btn-primary{
+    margin-top: 50px;
+    width: 100%;
+}

@@ -27,7 +27,7 @@ public class LoginController {
 
     @PostMapping("login")
     public String doLogin(String userName, String password, HttpSession session, Model model){
-        if(userName.equals("litenghao")&&password.equals("123")){
+        if(userName.equals("bicoin")&&password.equals("123")){
             session.setAttribute("admin",userName);
             return "index";
         }else {

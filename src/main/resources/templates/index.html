@@ -97,10 +97,9 @@
 
     $(document).ready(function () {
         $(".vCode-btn").on("click",function () {
-            console.log("点击验证码按钮");
             var type=$(this).val();
             var time_btn=$(this);
-            console.log(type)
+            changeTime(time_btn);
             $.ajax({
                 type:"post",
                 url:"/notice/sendCode",
@@ -110,8 +109,7 @@
                 contentType:'application/json',
                 success:function (res) {
                     if(res.code==0){
-                        console.log("验证码发送成功");
-                        changeTime(time_btn);
+                        alert("验证码发送成功");
                     }else {
                         console.log("验证码发送失败");
                         alert("验证码发送失败，验证码一个手机号1小时内只能接收10次短信")
@@ -119,6 +117,44 @@
                 }
             })
         })
+    });
+
+    function submitForm(code,amount,type){
+        if(code==""||amount==""){
+            alert("验证码或数量不能为空");
+            return;
+        }
+        $.ajax({
+            type:"post",
+            url:"/asset/transferAccounts",
+            data:JSON.stringify({
+                code:code,
+                amount:amount,
+                type:type
+            }),
+            contentType:'application/json',
+            success:function (res) {
+                if(res.code==0){
+                    alert(res.dialog.title);
+                }else {
+                    alert(res.dialog.title);
+                }
+            }
+        })
+    }
+
+    $("#rechargeBtn").on("click",function () {
+        var code=$("#vRechargeCode").val();
+        var amount=$("#rechargeNum").val();
+        var type=1;
+        submitForm(code,amount,type);
+    })
+
+    $("#cashBtn").on("click",function () {
+        var code=$("#vCashCode").val();
+        var amount=$("#cashNum").val();
+        var type=2;
+        submitForm(code,amount,type);
     })
 </script>
 </html>

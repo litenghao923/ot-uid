@@ -8,12 +8,10 @@ import com.moma.otasset.dao.domain.AssetUser;
 import com.moma.otasset.service.AssetService;
 import com.moma.otasset.util.StringUtil;
 import com.moma.otasset.web.WebResult;
-import com.sun.org.apache.bcel.internal.generic.IF_ACMPEQ;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.math.BigDecimal;
 import java.util.Collections;
@@ -28,7 +26,7 @@ public class AssetController {
     @Autowired
     private AssetService assetService;
 
-    @Resource
+    @Autowired
     private NoticeController noticeController;
 
     @Autowired
@@ -126,7 +124,7 @@ public class AssetController {
     }
 
     @PostMapping("transferAccounts")
-    public WebResult transferAccounts(HttpServletRequest request, JSONObject jsonObject) {
+    public WebResult transferAccounts(HttpServletRequest request,@RequestBody JSONObject jsonObject) {
         //----------------------------------用户身份检测-------------------------------------------
         //判断验证码不能为空
         Object code = jsonObject.get("code");

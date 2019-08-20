@@ -131,7 +131,11 @@ public class AssetController {
                 jsonObject.put("changeList", assetChangeVos);
                 return WebResult.okResult(jsonObject);
             }
-            return WebResult.okResult(Collections.EMPTY_LIST);
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("maxPage", 0);
+            jsonObject.put("nowPage", 0);
+            jsonObject.put("changeList", Collections.EMPTY_LIST);
+            return WebResult.okResult(jsonObject);
         } catch (Exception e) {
             log.error("获取充提记录出错，错误信息:{}", e.getMessage(), e);
             return WebResult.failException();
@@ -199,6 +203,10 @@ public class AssetController {
             jsonObject.put("assetUsers", assetUserByPage);
             return WebResult.okResult(jsonObject);
         }
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("maxPage", 0);
+        jsonObject.put("nowPage", 0);
+        jsonObject.put("changeList", Collections.EMPTY_LIST);
         return WebResult.okResult(Collections.EMPTY_LIST);
     }
 

@@ -34,7 +34,7 @@ public class AssetController {
 
     //获取所有用户信息
     @GetMapping("getAllUsers")
-    public WebResult getAllUsers() {
+    public WebResult getAllUsers(HttpServletRequest request) {
         List<String> allUserData = assetService.getAllUserData();
         if (allUserData != null) {
             return WebResult.okResult(allUserData);
@@ -124,7 +124,7 @@ public class AssetController {
     }
 
     @PostMapping("transferAccounts")
-    public WebResult transferAccounts(HttpServletRequest request,@RequestBody JSONObject jsonObject) {
+    public WebResult transferAccounts(HttpServletRequest request, @RequestBody JSONObject jsonObject) {
         //----------------------------------用户身份检测-------------------------------------------
         //判断验证码不能为空
         Object code = jsonObject.get("code");
@@ -132,7 +132,7 @@ public class AssetController {
             return WebResult.failResult(1023);
         }
         //获取用户信息
-        String phone = "13979122221";
+        String phone = "18621670791";
         if (StringUtil.isEmpty(phone)) {
             return WebResult.failResult("用户手机号不存在");
         }

@@ -63,7 +63,7 @@ public class AssetServiceImpl implements AssetService {
             }
             int i = assetUserMapper.updateByPrimaryKey(assetUser);
             if (i > 0) {
-                String s = addAssetChange(assetUsers.get(0), amount, bicoinAmount, 1);
+                String s = addAssetChange(assetUsers.get(0), amount, bicoinAmount == null ? BigDecimal.ZERO : bicoinAmount, 1);
                 return "充值" + s;
             } else {
                 return "充值失败";
@@ -92,7 +92,7 @@ public class AssetServiceImpl implements AssetService {
             assetUser.setuTime(new Date());
             int i = assetUserMapper.updateByPrimaryKey(assetUser);
             if (i > 0) {
-                String s = addAssetChange(assetUsers.get(0), amount, bicoinAmount, 2);
+                String s = addAssetChange(assetUsers.get(0), amount, bicoinAmount == null ? BigDecimal.ZERO : bicoinAmount, 2);
                 return "提现" + s;
             } else {
                 return "提现失败";
@@ -143,11 +143,11 @@ public class AssetServiceImpl implements AssetService {
         BigDecimal bicoinAmount = assetChangeMapperExt.sumBicoinAmount();
         if (type == 1) {
             assetChange.setAmount(amount);
-            assetChange.setBcoinAsset(bicoinAmount.subtract(amount));
+            assetChange.setBcoinAsset(bicoinAmount == null ? amount.negate() : bicoinAmount.subtract(amount));
             assetChange.setAmount(amount.negate());
         } else {
             assetChange.setAmount(amount);
-            assetChange.setBcoinAsset(bicoinAmount.add(amount));
+            assetChange.setBcoinAsset(bicoinAmount == null ? amount : bicoinAmount.add(amount));
             assetChange.setBcoinAssetChange(amount);
         }
 

@@ -61,7 +61,7 @@ public class AssetServiceImpl implements AssetService {
             if (asset.add(amount).compareTo(new BigDecimal(500000)) > 0) {
                 return "资产充值金额超限!";
             }
-            int i = assetUserMapper.updateByPrimaryKey(assetUser);
+            int i = assetUserMapper.updateByPrimaryKeySelective(assetUser);
             if (i > 0) {
                 String s = addAssetChange(assetUsers.get(0), amount, bicoinAmount == null ? BigDecimal.ZERO : bicoinAmount, 1);
                 return "充值" + s;
@@ -90,7 +90,7 @@ public class AssetServiceImpl implements AssetService {
             assetUser.setAsset(asset.subtract(amount));
             assetUser.setId(assetUsers.get(0).getId());
             assetUser.setuTime(new Date());
-            int i = assetUserMapper.updateByPrimaryKey(assetUser);
+            int i = assetUserMapper.updateByPrimaryKeySelective(assetUser);
             if (i > 0) {
                 String s = addAssetChange(assetUsers.get(0), amount, bicoinAmount == null ? BigDecimal.ZERO : bicoinAmount, 2);
                 return "提现" + s;

@@ -89,7 +89,9 @@ public class AssetServiceImpl implements AssetService {
             }
             assetUser.setAsset(asset.subtract(amount));
             assetUser.setId(assetUsers.get(0).getId());
-            assetUser.setuTime(new Date());
+            Date date = new Date();
+            date.setTime(System.currentTimeMillis());
+            assetUser.setuTime(date);
             int i = assetUserMapper.updateByPrimaryKeySelective(assetUser);
             if (i > 0) {
                 String s = addAssetChange(assetUsers.get(0), amount, bicoinAmount == null ? BigDecimal.ZERO : bicoinAmount, 2);
@@ -107,8 +109,10 @@ public class AssetServiceImpl implements AssetService {
         assetUser.setNickName(nickName);
         assetUser.setHuobiUid(uid);
         assetUser.setAsset(BigDecimal.ZERO);
-        assetUser.setcTime(new Date());
-        assetUser.setuTime(new Date());
+        Date date = new Date();
+        date.setTime(System.currentTimeMillis());
+        assetUser.setcTime(date);
+        assetUser.setuTime(date);
         int insert = assetUserMapper.insert(assetUser);
         return insert;
     }
@@ -152,7 +156,9 @@ public class AssetServiceImpl implements AssetService {
         }
 
         assetChange.setOperationType(type);
-        assetChange.setcTime(new Date());
+        Date date = new Date();
+        date.setTime(System.currentTimeMillis());
+        assetChange.setcTime(date);
         int insert = assetChangeMapper.insert(assetChange);
         if (insert > 0) {
             return "转账成功";
@@ -201,7 +207,10 @@ public class AssetServiceImpl implements AssetService {
         }
 
         assetChange.setOperationType(type);
-        assetChange.setcTime(new Date());
+        long l = System.currentTimeMillis();
+        Date date = new Date();
+        date.setTime(l);
+        assetChange.setcTime(date);
         int insert = assetChangeMapper.insert(assetChange);
         if (insert > 0) {
             return "成功";

@@ -64,13 +64,18 @@ public class AssetController {
         if (code == null && StringUtil.isEmpty(code)) {
             return WebResult.failResult(1023);
         }
+        //判断uid
+        Long uid = jsonObject.getLong("uid");
+        if (uid == null) {
+            return WebResult.failResult("uid不能为空");
+        }
         //获取用户信息
         String phone = "15652571183";//13979122221
         if (StringUtil.isEmpty(phone)) {
             return WebResult.failResult("用户手机号不存在");
         }
         //验证手机号验证码正确性
-        if (!noticeController.checkPhoneCode(phone, "86", code)) {
+        if (!noticeController.checkPhoneCode(phone, uid.toString(), code)) {
             return WebResult.failResult(1002);
         }
         //----------------------------------根据执行参数，执行命令---------------------------
@@ -78,11 +83,6 @@ public class AssetController {
         Integer operationType = jsonObject.getInteger("operationType");
         if (operationType == null) {
             return WebResult.failResult("操作类型不能为空");
-        }
-        //判断uid
-        Long uid = jsonObject.getLong("uid");
-        if (uid == null) {
-            return WebResult.failResult("uid不能为空");
         }
         //判断充值金额
         BigDecimal amount = jsonObject.getBigDecimal("amount");
@@ -166,9 +166,9 @@ public class AssetController {
         if (StringUtil.isEmpty(phone)) {
             return WebResult.failResult("用户手机号不存在");
         }
-        String areaCode = "86";
+        String uid = "";
         //验证手机号验证码正确性
-        if (!noticeController.checkPhoneCode(phone, areaCode, code)) {
+        if (!noticeController.checkPhoneCode(phone, "88888888", code)) {
             return WebResult.failResult(1002);
         }
         try {

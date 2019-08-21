@@ -46,7 +46,7 @@ public class NoticeController {
             return WebResult.failResult("参数异常!");
         }
         if (uid == null) {
-            return WebResult.failResult("参数异常!");
+            uid = "88888888";
         }
         String phone = "";
         switch (type) {

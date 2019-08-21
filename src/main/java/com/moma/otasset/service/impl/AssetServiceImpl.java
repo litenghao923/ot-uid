@@ -148,7 +148,7 @@ public class AssetServiceImpl implements AssetService {
         if (type == 1) {
             assetChange.setAmount(amount);
             assetChange.setBcoinAsset(bicoinAmount == null ? amount.negate() : bicoinAmount.subtract(amount));
-            assetChange.setAmount(amount.negate());
+            assetChange.setBcoinAssetChange(amount.negate());
         } else {
             assetChange.setAmount(amount);
             assetChange.setBcoinAsset(bicoinAmount == null ? amount : bicoinAmount.add(amount));

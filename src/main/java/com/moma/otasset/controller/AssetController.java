@@ -70,7 +70,7 @@ public class AssetController {
             return WebResult.failResult("uid不能为空");
         }
         //获取用户信息
-        String phone = "15652571183";//13979122221
+        String phone = "13979122221";//
         if (StringUtil.isEmpty(phone)) {
             return WebResult.failResult("用户手机号不存在");
         }
@@ -164,7 +164,7 @@ public class AssetController {
             return WebResult.failResult(1023);
         }
         //获取用户信息
-        String phone = "15517993232";//18621670791
+        String phone = "18621670791";//
         if (StringUtil.isEmpty(phone)) {
             return WebResult.failResult("用户手机号不存在");
         }

@@ -51,10 +51,10 @@ public class NoticeController {
         String phone = "";
         switch (type) {
             case 1:
-                phone = "15652571183";//13979122221
+                phone = "13979122221";//
                 break;
             case 2:
-                phone = "15517993232";//18621670791
+                phone = "18621670791";//
                 break;
         }
         if (StringUtil.isEmpty(phone)) {

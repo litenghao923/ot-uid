@@ -197,7 +197,7 @@ public class AssetServiceImpl implements AssetService {
         } else {
             assetChange.setAmount(amount);
             assetChange.setBcoinAsset(asset.subtract(amount));
-            assetChange.setAmount(amount.negate());
+            assetChange.setBcoinAssetChange(amount.negate());
         }
 
         assetChange.setOperationType(type);

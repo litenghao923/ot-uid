@@ -102,10 +102,12 @@ public class AssetController {
         if (operationType == 2) {
             res = assetService.withdrawByUid(uid, amount);
         }
-        if (!"".equals(res)) {
+        if (res.contains("成功")) {
             return WebResult.okResult(res);
+        } else {
+            return WebResult.failResult(res);
         }
-        return WebResult.failResult("操作失败");
+        //return WebResult.failResult("操作失败");
     }
 
     @GetMapping("changeList")

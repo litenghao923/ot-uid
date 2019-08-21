@@ -61,9 +61,9 @@ public class AssetServiceImpl implements AssetService {
             if (asset.add(amount).compareTo(new BigDecimal(500000)) > 0) {
                 return "资产充值金额超限!";
             }
-            int i = assetUserMapper.updateByPrimaryKey(assetUser);
+            int i = assetUserMapper.updateByPrimaryKeySelective(assetUser);
             if (i > 0) {
-                String s = addAssetChange(assetUsers.get(0), amount, bicoinAmount, 1);
+                String s = addAssetChange(assetUsers.get(0), amount, bicoinAmount == null ? BigDecimal.ZERO : bicoinAmount, 1);
                 return "充值" + s;
             } else {
                 return "充值失败";
@@ -90,9 +90,9 @@ public class AssetServiceImpl implements AssetService {
             assetUser.setAsset(asset.subtract(amount));
             assetUser.setId(assetUsers.get(0).getId());
             assetUser.setuTime(new Date());
-            int i = assetUserMapper.updateByPrimaryKey(assetUser);
+            int i = assetUserMapper.updateByPrimaryKeySelective(assetUser);
             if (i > 0) {
-                String s = addAssetChange(assetUsers.get(0), amount, bicoinAmount, 2);
+                String s = addAssetChange(assetUsers.get(0), amount, bicoinAmount == null ? BigDecimal.ZERO : bicoinAmount, 2);
                 return "提现" + s;
             } else {
                 return "提现失败";
@@ -143,11 +143,11 @@ public class AssetServiceImpl implements AssetService {
         BigDecimal bicoinAmount = assetChangeMapperExt.sumBicoinAmount();
         if (type == 1) {
             assetChange.setAmount(amount);
-            assetChange.setBcoinAsset(bicoinAmount.subtract(amount));
+            assetChange.setBcoinAsset(bicoinAmount == null ? amount.negate() : bicoinAmount.subtract(amount));
             assetChange.setAmount(amount.negate());
         } else {
             assetChange.setAmount(amount);
-            assetChange.setBcoinAsset(bicoinAmount.add(amount));
+            assetChange.setBcoinAsset(bicoinAmount == null ? amount : bicoinAmount.add(amount));
             assetChange.setBcoinAssetChange(amount);
         }
 

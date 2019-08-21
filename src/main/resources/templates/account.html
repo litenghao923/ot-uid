@@ -64,8 +64,8 @@
             url:"/asset/accountOverview",
             success:function (res) {
                 if(res.code==0){
-                    $("#all-account").html(res.data.bcoinAsset);
-                    $("#bicoin-account").html(res.data.allAsset);
+                    $("#all-account").html(res.data.allAsset);
+                    $("#bicoin-account").html(res.data.bcoinAsset);
                 }else {
                     alert("数据请求失败")
                 }

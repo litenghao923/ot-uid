@@ -90,6 +90,7 @@ public class NoticeController {
             }*/
             String code = String.valueOf((int) ((Math.random() * 9 + 1) * 1000));
             String content = "【比特助手】您的" + type + "验证码是" + code + "。如非本人操作，请忽略本短信";
+            log.info("本次发送短信的手机号:{}，模板：{}", phone, content);
             JSONObject jsonObject = ailuPaasUtil.smsSendMsg(phone, content, "2398914");
             Integer resCode = jsonObject.getInteger("code");
             if (Objects.equals(0, resCode)) {

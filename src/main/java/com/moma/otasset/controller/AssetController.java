@@ -40,7 +40,7 @@ public class AssetController {
 
     //获取所有用户信息
     @GetMapping("getAllUsers")
-    public WebResult getAllUsers(HttpServletRequest request) {
+    public WebResult getAllUsers() {
         List<AssetUser> allUserData = assetService.getAllUserData();
         if (allUserData != null) {
             JSONArray jsonArray = new JSONArray();
@@ -57,21 +57,20 @@ public class AssetController {
 
     //处理充值提现
     @PostMapping("recharge")
-    public WebResult settingFirmOffer(HttpServletRequest request, @RequestBody JSONObject jsonObject) {
+    public WebResult settingFirmOffer(@RequestBody JSONObject jsonObject) {
         //----------------------------------用户身份检测-------------------------------------------
         //判断验证码不能为空
-        Object code = jsonObject.get("code");
-        if (code == null && StringUtil.isEmpty(code.toString())) {
+        String code = jsonObject.getString("code");
+        if (code == null && StringUtil.isEmpty(code)) {
             return WebResult.failResult(1023);
         }
         //获取用户信息
-        String phone = "13979122221";
+        String phone = "15652571183";//13979122221
         if (StringUtil.isEmpty(phone)) {
             return WebResult.failResult("用户手机号不存在");
         }
-        String areaCode = "86";
         //验证手机号验证码正确性
-        if (!noticeController.checkPhoneCode(phone, areaCode, code.toString())) {
+        if (!noticeController.checkPhoneCode(phone, "86", code)) {
             return WebResult.failResult(1002);
         }
         //----------------------------------根据执行参数，执行命令---------------------------
@@ -155,21 +154,21 @@ public class AssetController {
     }
 
     @PostMapping("transferAccounts")
-    public WebResult transferAccounts(HttpServletRequest request, @RequestBody JSONObject jsonObject) {
+    public WebResult transferAccounts(@RequestBody JSONObject jsonObject) {
         //----------------------------------用户身份检测-------------------------------------------
         //判断验证码不能为空
-        Object code = jsonObject.get("code");
-        if (code == null && StringUtil.isEmpty(code.toString())) {
+        String code = jsonObject.getString("code");
+        if (code == null && StringUtil.isEmpty(code)) {
             return WebResult.failResult(1023);
         }
         //获取用户信息
-        String phone = "18621670791";
+        String phone = "15517993232";//18621670791
         if (StringUtil.isEmpty(phone)) {
             return WebResult.failResult("用户手机号不存在");
         }
         String areaCode = "86";
         //验证手机号验证码正确性
-        if (!noticeController.checkPhoneCode(phone, areaCode, code.toString())) {
+        if (!noticeController.checkPhoneCode(phone, areaCode, code)) {
             return WebResult.failResult(1002);
         }
         try {

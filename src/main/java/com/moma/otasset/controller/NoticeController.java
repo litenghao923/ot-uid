@@ -42,10 +42,10 @@ public class NoticeController {
         String phone = "";
         switch (type) {
             case 1:
-                phone = "13979122221";
+                phone = "15652571183";//13979122221
                 break;
             case 2:
-                phone = "18621670791";
+                phone = "15517993232";//18621670791
                 break;
         }
         if (StringUtil.isEmpty(phone)) {
@@ -77,8 +77,13 @@ public class NoticeController {
                 jsonObject = ailuPaasUtil.sendPhoneCode(phone);
             } else {
                 //根据模板id发送短信
-                jsonObject = ailuPaasUtil.sendPhoneCode("+" + phone, areaCode, 4);
+                //jsonObject = ailuPaasUtil.sendPhoneCode("+" + phone, areaCode, 4);
             }
+           /* String type = "";
+            String code = "";
+            String content = "比特助手】您的" + type + "验证码是" + code + "。如非本人操作，请忽略本短信";
+            //
+            JSONObject jsonObject = ailuPaasUtil.smsSendMsg(phone, content, "2398914");*/
             Integer code = jsonObject.getInteger("code");
             if (Objects.equals(0, code)) {
                 return WebResult.okResult(1007);
@@ -98,6 +103,7 @@ public class NoticeController {
             if (!"86".equals(areaCode)) {
                 phone = "+" + phone;
             }
+            log.info("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
             JSONObject jsonObject = ailuPaasUtil.checkPhoneCode(phone, code);
             return Objects.equals(0, jsonObject.getInteger("code"));
         } catch (Exception e) {
